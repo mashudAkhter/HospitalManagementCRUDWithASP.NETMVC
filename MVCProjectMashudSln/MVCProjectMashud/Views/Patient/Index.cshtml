@@ -1,0 +1,81 @@
+﻿@model PagedList.IPagedList<MVCProjectMashud.Models.ViewModel.PatientListViewModel>
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+@Html.ActionLink("Create New Patient", "Create")
+<div>
+    @using (Html.BeginForm("Index", "Patient", FormMethod.Get))
+    {
+        <p>
+            Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
+    }
+    <table class="table table-bordered">
+        <tr>
+            <th>Patient Id</th>
+            <th>@Html.ActionLink("Patient Name", "Index", new { sortOrder = ViewBag.SortNameParam })</th>
+            <th>Age</th>
+            <th>Admission Date</th>
+            <th>Email</th>
+            <th>Bed</th>
+            <th>Cabin</th>
+            <th>Image Name</th>
+            <th>Image Url</th>
+            <th>Doctor Name</th>
+            <th>Actions..</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.PatientId)</td>
+                <td>@Html.DisplayFor(modelItem => item.PatientName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Age)</td>
+                <td>@Convert.ToString(String.Format("{0:dd/MM/yyyy}", item.AdmissionDate))</td>
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                <td>@Html.DisplayFor(modelItem => item.Bed)</td>
+                <td>@Html.DisplayFor(modelItem => item.Cabin)</td>
+                <td>@Html.DisplayFor(modelItem => item.ImageName)</td>
+                <td><img src="@Url.Content(item.ImageUrl)" alt="Image" width="50" height="50" /></td>
+                <td>@Html.DisplayFor(modelItem => item.DoctorName)</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.PatientId })|
+                    @Html.ActionLink("Delete", "Delete", new { id = item.PatientId })|
+                    <a href="#" name="Details" onclick="DetailsRecord('+@item.PatientId+')">Details</a>
+                </td>
+            </tr>
+        }
+    </table>
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+    of @Model.PageCount @Html.PagedListPager(Model, Page => Url.Action("Index", new { Page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+</div>
+
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    function DetailsRecord(PatientId) {
+        $.ajax({
+            url: "/Patient/Details?PatientId=" + PatientId,
+            type: 'GET',
+            data: "",
+            contentType: 'application/json: charset=utf-8',
+            success: function (data) {
+                $('#partialDiv').show();
+                $('#partialDiv').html(data);
+
+            },
+            error: function (error) {
+                alert(error)
+            }
+        })
+    }
+</script>
+<div id="partialDiv">
+
+</div>

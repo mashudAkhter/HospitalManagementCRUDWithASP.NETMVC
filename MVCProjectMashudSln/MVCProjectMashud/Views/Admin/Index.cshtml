@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MVCProjectMashud.Models.ViewModel.UserRoleViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>User wise Role list</h2>
+<table class="table table-striped">
+    <tr>
+        <th>User Name</th>
+        <th>Role Name</th>
+        <th>Actions..</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelitem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.RollName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.RoleId })|
+                @Html.ActionLink("Delete", "Delete", new { id = item.RoleId })|
+                @Html.ActionLink("Details", "Details", new { id = item.RoleId })
+            </td>
+        </tr>
+    }
+</table>
+

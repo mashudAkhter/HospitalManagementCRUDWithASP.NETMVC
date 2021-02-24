@@ -1,0 +1,111 @@
+﻿@model MVCProjectMashud.Models.ViewModel.CreatePatientVIewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+<h2>Create Patient</h2>
+@using (Html.BeginForm("AddOrEdit", "Patient", FormMethod.Post, new { @enctype = "multipart/form-data", @id = "Submit" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group row">
+        @Html.LabelFor(model => model.PatientName, htmlAttributes: new { @class = "form-control-label col-md-8" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.PatientName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.PatientName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        @Html.LabelFor(model => model.Age, htmlAttributes: new { @class = "form-control-label col-md-8" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        @Html.LabelFor(model => model.AdmissionDate, htmlAttributes: new { @class = "form-control-label col-md-8" })
+        <div class="col-md-10">
+
+            @Html.TextBoxFor(model => model.AdmissionDate, "{0:MM/dd/yyyy}", new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.AdmissionDate, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "form-control-label col-md-8" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PatientName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            @Html.LabelFor(model => model.ConfirmEmail, htmlAttributes: new { @class = "form-control-label col-md-8" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ConfirmEmail, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ConfirmEmail, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Bed, htmlAttributes: new { @class = "form-control-label col-md-8" })
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.Bed, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Bed, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Cabin, htmlAttributes: new { @class = "form-control-label col-md-8" })
+            <div class="col-md-10">
+                @Html.CheckBoxFor(model => model.Cabin, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Cabin, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        @Html.LabelFor(model => model.ImageUrl, htmlAttributes: new { @class = "form-control-label col-md-8" })
+        <div class="col-md-10">
+            <img src="~/Images/pro.jpg" width="80" height="100" class="change_edit" alt="Alternate Text" />
+            <input type="file" name="ImageFile" class="form-control changeImage" required />
+            @Html.ValidationMessageFor(model => model.ImageUrl, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        @Html.LabelFor(model => model.DoctorId, htmlAttributes: new { @class = "form-control-label col-md-8" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.DoctorId, new SelectList(Model.docList, "DoctorId", "DoctorName"), "Select Doctor")
+            @Html.ValidationMessageFor(model => model.DoctorId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-success" />
+        </div>
+        @Html.ActionLink("Back to Patient List", "Index")
+    </div>
+}
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+@*<script src="~/Scripts/jquery-3.0.0.min.js"></script>*@
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#AdmissionDate").datepicker({
+            changeMonth: true,
+            changeYear: true
+        });
+    })
+    $(function () {
+        $('.changeImage').change(function () {
+            var input = this;
+            if (input.files) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $(".change_edit").attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0])
+            }
+            else {
+                $(".change_edit").attr('src', '/Images/@Model.ImageUrl');
+            }
+        })
+    })
+</script>

@@ -1,0 +1,53 @@
+﻿@model MVCProjectMashud.Models.ViewModel.CreatePatientVIewModel
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Delete Patient</h4>
+<h3>Are you sure you want to delete this record?</h3>
+<div>
+    @Html.HiddenFor(model => model.PatientId)
+    @Html.HiddenFor(model => model.ConfirmEmail)
+    <dl>
+        <dt>@Html.DisplayNameFor(model => model.PatientName)</dt>
+        <dd>@Html.DisplayFor(model => model.PatientName)</dd>
+    </dl>
+    <dl>
+        <dt>@Html.DisplayNameFor(model => model.Age)</dt>
+        <dd>@Html.DisplayFor(model => model.Age)</dd>
+    </dl>
+    <dl>
+        <dt>@Html.DisplayNameFor(model => model.AdmissionDate)</dt>
+        <dd>@Html.DisplayFor(model => model.AdmissionDate)</dd>
+    </dl>
+    <dl>
+        <dt>@Html.DisplayNameFor(model => model.Email)</dt>
+        <dd>@Html.DisplayFor(model => model.Email)</dd>
+    </dl>
+    <dl>
+        <dt>@Html.DisplayNameFor(model => model.Bed)</dt>
+        <dd>@Html.DisplayFor(model => model.Bed)</dd>
+    </dl>
+    <dl>
+        <dt>@Html.DisplayNameFor(model => model.Cabin)</dt>
+        <dd>@Html.DisplayFor(model => model.Cabin)</dd>
+    </dl>
+    <dl>
+        <dt>@Html.DisplayNameFor(model => model.ImageName)</dt>
+        <dd>@Html.DisplayFor(model => model.ImageName)</dd>
+    </dl>
+    <dl>
+        <dt>@Html.DisplayNameFor(model => model.ImageUrl)</dt>
+        <dd><img src="@Url.Content(Model.ImageUrl)" width="50" height="50" /></dd>
+    </dl>
+    @using (Html.BeginForm("Delete", "Patient", FormMethod.Post, new { @enctype = "multipart/form-data", @id = "Submit" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.PatientId)
+        <div>
+            <input type="submit" class="btn btn-danger" value="Delete" />
+        </div>
+    }
+    @Html.ActionLink("Back to Patient List", "Index")
+</div>

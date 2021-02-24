@@ -1,0 +1,89 @@
+﻿@model IEnumerable<MVCProjectMashud.Models.tblDepartment>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h4>Department Head List</h4>
+<table id="tblDepartments" class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Department Name</th>
+            <th>Department Head</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.DepartmentHead</td>
+                <td><input type="button" value="Remove" onclick="Remove(this)" /></td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td><input type="text" id="txtName" /></td>
+            <td><input type="text" id="txtHead" /></td>
+            <td>
+                <input type="button" id="btnAdd" value="Add" />
+            </td>
+        </tr>
+    </tfoot>
+
+</table>
+<input type="button" id="btnSave" value="Save all" />
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+<script src="~/Scripts/json2.js"></script>
+<script>
+    $("body").on("click", "#btnAdd", function () {
+        var txtName = $("#txtName");
+        var txtHead = $("#txtHead");
+        var tBody = $("#tblDepartments>TBODY")[0];
+        var row = tBody.insertRow(-1);
+        var cell = $(row.insertCell(-1));
+        cell.html(txtName.val());
+        cell = $(row.insertCell(-1));
+        cell.html(txtHead.val());
+        cell = $(row.insertCell(-1));
+        var btnRemove = $("<input/>");
+        btnRemove.attr("type", "button");
+        btnRemove.attr("onclick", "Remove(this);");
+        btnRemove.val("Remove");
+        cell.append(btnRemove);
+        txtName.val("");
+        txtHead.val("");
+    });
+    function Remove(button) {
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(0).html();
+        if (confirm("Do you want to delete:" + name)) {
+            var table = $("#tblDepartments")[0];
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+
+    $("body").on("click", "#btnSave", function () {
+
+        var departments = new Array();
+        $("#tblDepartments TBODY TR").each(function () {
+            var row = $(this);
+            var department = {};
+            department.Name = row.find("TD").eq(0).html();
+            department.Country = row.find("TD").eq(1).html();
+            departments.push(department);
+        });
+        $.ajax({
+            type: "POST",
+            url: "/Department/InsertDepartments",
+            data: JSON.stringify(departments),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (r) {
+                alert(r + " record(s) inserted.");
+            }
+        });
+
+    });
+</script>
